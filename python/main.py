@@ -78,21 +78,26 @@ class ChessGame:
                         if self.board[er][ec] != ".":
                             return True
                 return False
-            elif piece.lower() == "b":
-                if abs(dx) == abs(dy) and dx != 0:
-                    return True
-                else:
-                    return False 
-            elif piece.lower() == "r":
-                if (dx == 0 and dy != 0) or (dy == 0 and dx != 0):
-                    return True
-                else:
+            elif piece.lower() in ["b", "r", "q"]:
+                if piece.lower() == "b" and not (abs(dx) == abs(dy) and dx != 0):
                     return False
-            elif piece.lower() == "q":
-                if (dx == 0 and dy != 0) or (dy == 0 and dx != 0) or (abs(dx) == abs(dy) and dx != 0):
-                    return True
-                else:
+                if piece.lower() == "r" and not ((dx == 0 and dy != 0) or (dx != 0 and dy == 0)):
                     return False
+                if piece.lower() == "q" and not ((dx == 0 and dy != 0) or (dx != 0 and dy == 0) or (abs(dx) == abs(dy) and dx != 0)):
+                    return False
+
+                step_row = 1 if dx > 0 else (-1 if dx < 0 else 0)
+                step_col = 1 if dy > 0  else (-1 if dy < 0 else 0)
+
+                curr_row = sr + step_row
+                curr_col = sc + step_col
+                while curr_row != er or curr_col != ec:
+                    if self.board[curr_row][curr_col] != ".":
+                        print "blocked path!"
+                        return Flase
+                    curr_row += step_row
+                    curr_col += step_col
+                return True
             elif piece.lower() == "k":
                 if abs(dx) <= 1 and abs(dy) <= 1 and not (dx == 0 and dy == 0):
                     return True 
